@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAMGA Care Bridge · 임직원 경조 지원 오케스트레이션 (콘셉트)</title>
+<meta name="description" content="SAMGA Care Bridge — 기업 HR을 위한 임직원 경조(장례) 지원 오케스트레이션 콘셉트 프로토타입. 모든 수치·회사·인물은 가상입니다.">
+<meta name="robots" content="noindex">
+<style>
+/* ===== SAMGA Care Bridge — hi-fi 스킨 (디자인 토큰 SSOT) ===== */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --surface-2:#f7f9fb; --surface-3:#f1f4f7;
+  --ink:#1e2530; --ink-2:#3d4757; --muted:#76818f; --faint:#9aa4b2;
+  --line:#e4e8ee; --line-2:#d5dce4;
+  --accent:#2b5566; --accent-strong:#1f3f4d; --accent-2:#3f7186; --accent-weak:#e9f0f3; --accent-weak-2:#d7e5ea;
+  --ok:#2f6f5e; --ok-weak:#e4f0ec; --warn:#8a6d3b; --warn-weak:#f2ecdd;
+  --radius:14px; --radius-sm:10px; --radius-xs:6px;
+  --shadow:0 1px 2px rgba(24,36,48,.05), 0 8px 24px rgba(24,36,48,.06);
+  --shadow-sm:0 1px 2px rgba(24,36,48,.06);
+  --font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard",system-ui,"Malgun Gothic","Noto Sans KR",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;letter-spacing:-.01em;padding-bottom:24px}
+.screen[hidden]{display:none}
+svg{display:block}
+a{color:var(--accent);text-decoration:none}
+h2{font-size:15px;font-weight:700;color:var(--ink)}
+h3{font-size:15px;font-weight:700;color:var(--ink)}
+button{font:inherit}
+:focus-visible{outline:2.5px solid var(--accent-2);outline-offset:2px;border-radius:4px}
+
+/* 공통 폭 컨테이너 */
+.app,.tabs,main,.foot{width:min(1180px,100% - 32px);margin-inline:auto}
+
+/* 신뢰 라벨 바 (상단 고정) */
+.trustbar{position:sticky;top:0;z-index:50;background:var(--accent-strong);color:#eaf2f5;
+  font-size:12.5px;text-align:center;padding:8px 16px;letter-spacing:.01em;
+  border-bottom:1px solid rgba(255,255,255,.12);white-space:normal}
+
+/* 헤더 */
+.app{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);padding:16px 20px;margin-top:16px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(150deg,var(--accent) 0%,var(--accent-strong) 100%);flex:0 0 auto;box-shadow:var(--shadow-sm)}
+.names{min-width:0}
+.pname{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.02em;white-space:nowrap}
+.ptag{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbadge{display:inline-flex;align-items:center;gap:7px;justify-content:center;
+  background:var(--accent-weak);color:var(--accent-strong);border:1px solid var(--accent-weak-2);
+  font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:999px;white-space:nowrap;flex:0 0 auto}
+.hbadge .dotmark{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:0 0 auto}
+
+/* progress-rail */
+.rail{display:flex;align-items:flex-start;gap:0;min-width:0}
+.step{flex:1 1 0;min-width:104px;position:relative;text-align:center;padding-top:2px}
+.step .dot{position:relative;z-index:1;width:30px;height:30px;border-radius:50%;margin:0 auto 7px;
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+  background:var(--surface-3);color:var(--faint);border:2px solid var(--line-2);transition:all .3s ease}
+.step .slabel{font-size:12.5px;color:var(--muted);font-weight:600;line-height:1.35;padding:0 4px}
+.step:not(:last-child)::after{content:"";position:absolute;top:15px;left:calc(50% + 19px);right:calc(-50% + 19px);
+  height:2px;background:var(--line-2);z-index:0;transition:background .3s ease}
+.step.done .dot{background:var(--accent);color:#fff;border-color:var(--accent)}
+.step.done::after{background:var(--accent)}
+.step.done .slabel{color:var(--ink-2)}
+.step.active .dot{background:#fff;color:var(--accent);border-color:var(--accent);
+  box-shadow:0 0 0 4px var(--accent-weak)}
+.step.active .slabel{color:var(--accent);font-weight:700}
+
+/* 탭 */
+.tabs{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tab{flex:1 1 auto;min-width:0;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 16px;
+  color:var(--ink-2);cursor:pointer;transition:all .18s ease;box-shadow:var(--shadow-sm)}
+.tab .tnum{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.tab .tlabel{font-size:14px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tab:hover{border-color:var(--accent-weak-2);background:var(--surface-2)}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent)}
+.tab[aria-selected="true"] .tnum{color:#bcd3dc}
+.tab[aria-selected="true"] .tlabel{color:#fff}
+.tab[data-screen="s2"] .tnum::after{content:" · 클릭 불가";color:var(--faint);font-weight:600}
+
+main{margin-top:16px}
+
+/* ===== 화면 1 : 3-컬럼 콘솔 ===== */
+.s1grid{display:grid;grid-template-columns:290px minmax(0,1fr) 300px;gap:16px;align-items:start}
+.col{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
+.colhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:16px 18px 12px;border-bottom:1px solid var(--line)}
+.colhead .hint{font-size:11.5px;color:var(--faint);font-weight:600;white-space:nowrap}
+
+/* 정책 라이브러리 */
+.policy-list{padding:8px 14px 4px;display:flex;flex-direction:column;gap:8px}
+.pgroup{border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 13px;background:var(--surface-2)}
+.pg-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pgname{font-size:14px;font-weight:700;color:var(--ink);min-width:0}
+.pg-items{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{font-size:12px;font-weight:600;color:var(--accent-strong);background:var(--accent-weak);
+  border:1px solid var(--accent-weak-2);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.pgroup.off{opacity:.5}
+.pgroup.off .chip{color:var(--muted);background:var(--surface-3);border-color:var(--line)}
+/* 토글 스위치 */
+.switch{position:relative;display:inline-flex;flex:0 0 auto;width:44px;height:26px;cursor:pointer}
+.switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.slider{position:absolute;inset:0;background:var(--line-2);border-radius:999px;transition:background .22s ease}
+.slider::before{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .22s ease}
+.switch input:checked + .slider{background:var(--accent)}
+.switch input:checked + .slider::before{transform:translateX(18px)}
+.policy-note{margin:10px 14px 16px;font-size:12px;line-height:1.6;color:var(--muted);
+  background:var(--surface-3);border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 13px}
+
+/* Case 상세 */
+.case{display:flex;flex-direction:column}
+.casehead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.ch-left{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ctitle{font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+.cid{font-size:12px;color:var(--muted);font-weight:600}
+.cbadge{flex:0 0 auto;font-size:12px;font-weight:700;color:#fff;background:var(--accent-2);
+  border-radius:999px;padding:5px 12px;white-space:nowrap}
+.casebody{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.flabel{font-size:12px;font-weight:700;color:var(--muted)}
+.fval{font-size:14.5px;font-weight:600;color:var(--ink);background:var(--surface-2);
+  border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 13px}
+#relSel{font-family:var(--font);font-size:14.5px;font-weight:600;color:var(--ink);background:var(--surface);
+  border:1.5px solid var(--line-2);border-radius:var(--radius-sm);padding:11px 13px;cursor:pointer;
+  min-height:44px;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232b5566' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 13px center}
+#relSel:hover{border-color:var(--accent-2)}
+/* 지원 항목 */
+.support{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface-2);overflow:hidden}
+.sup-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line)}
+.sh-title{font-size:12.5px;font-weight:700;color:var(--ink-2)}
+.autotag{font-size:11px;font-weight:700;color:var(--ok);background:var(--ok-weak);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.sup-items{display:flex;flex-direction:column}
+.supitem{display:flex;align-items:center;gap:11px;padding:11px 13px;border-top:1px solid var(--line)}
+.supitem:first-child{border-top:none}
+.si-ic{flex:0 0 auto;width:32px;height:32px;border-radius:9px;background:var(--accent-weak);
+  display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.si-ic svg{width:18px;height:18px}
+.si-name{font-size:14px;font-weight:700;color:var(--ink);min-width:0;flex:1 1 auto}
+.si-meta{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;flex:0 0 auto}
+/* 메타행 */
+.metarow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.meta{display:flex;flex-direction:column;gap:5px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:11px 13px;min-width:0}
+.meta.payer{grid-column:1 / -1}
+.mk{font-size:11.5px;font-weight:700;color:var(--muted)}
+.mv{font-size:14px;font-weight:700;color:var(--ink);min-width:0}
+.meta.payer .mv{font-size:13px;font-weight:600;color:var(--ink-2)}
+.mv.badge{display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;
+  font-size:12px;padding:3px 11px;border-radius:999px}
+.mv.badge[data-state="wait"]{color:var(--warn);background:var(--warn-weak)}
+.mv.badge[data-state="ok"]{color:var(--ok);background:var(--ok-weak)}
+#slaTimer{font-variant-numeric:tabular-nums;color:var(--accent)}
+/* 증빙 */
+.evidence{display:flex;flex-direction:column;gap:7px}
+.evlabel{font-size:12px;font-weight:700;color:var(--muted)}
+.evbox{display:flex;align-items:center;gap:11px;border:1.5px dashed var(--line-2);border-radius:var(--radius-sm);
+  padding:14px 13px;background:var(--surface-2)}
+.evicon{flex:0 0 auto;width:34px;height:34px;border-radius:9px;background:var(--surface-3);display:flex;
+  align-items:center;justify-content:center;color:var(--muted)}
+.evtext{font-size:12.5px;color:var(--muted);font-weight:600}
+/* 액션 */
+.actions{display:flex;gap:10px;padding:16px 18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.btn{flex:1 1 auto;min-height:46px;display:inline-flex;align-items:center;justify-content:center;text-align:center;
+  gap:7px;font-size:14px;font-weight:700;border-radius:var(--radius-sm);cursor:pointer;padding:0 16px;
+  border:1.5px solid var(--accent);color:var(--accent);background:var(--surface);transition:all .16s ease;white-space:nowrap}
+.btn:hover{background:var(--accent-weak)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent-strong);border-color:var(--accent-strong)}
+.btn[disabled]{opacity:.45;cursor:default;pointer-events:none}
+.btn.done{background:var(--ok-weak);color:var(--ok);border-color:var(--ok-weak)}
+
+/* 타임라인 */
+.timeline{list-style:none;padding:14px 18px 18px}
+.tlitem{position:relative;display:flex;gap:12px;padding-bottom:16px}
+.tlitem:last-child{padding-bottom:0}
+.tl-dot{flex:0 0 auto;width:12px;height:12px;margin-top:4px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-weak);position:relative;z-index:1}
+.tlitem:not(:last-child)::before{content:"";position:absolute;left:5px;top:16px;bottom:0;width:2px;background:var(--line-2)}
+.tlitem.pending .tl-dot{background:var(--line-2);box-shadow:0 0 0 3px var(--surface-3)}
+.tl-body{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tl-t{font-size:13.5px;font-weight:700;color:var(--ink)}
+.tlitem.pending .tl-t{color:var(--muted)}
+.tl-d{font-size:12px;color:var(--muted);font-weight:500;line-height:1.45}
+
+/* ===== 화면 3 : 리포트 ===== */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:18px 18px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.kpi-label{font-size:12.5px;font-weight:700;color:var(--muted)}
+.kpi-value{font-size:27px;font-weight:800;color:var(--accent);letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi-sub{font-size:11.5px;color:var(--faint);font-weight:600}
+.s3grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
+  padding:16px 18px;margin-top:14px;min-width:0}
+.s3grid .panel{margin-top:0}
+.panelhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:12px}
+.panelhead .hint{font-size:11.5px;color:var(--faint);font-weight:600;white-space:nowrap}
+.chartwrap{width:100%}
+.chartwrap svg{width:100%;height:auto;overflow:visible}
+/* 테이블 */
+.ftable{width:100%;border-collapse:collapse;font-size:13px}
+.ftable th{text-align:left;font-size:11.5px;font-weight:700;color:var(--muted);padding:9px 12px;
+  border-bottom:1.5px solid var(--line-2);white-space:nowrap}
+.ftable td{padding:11px 12px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:middle}
+.ftable td span{font-weight:600}
+.ftable tbody tr:last-child td{border-bottom:none}
+.ftable tbody tr:hover{background:var(--surface-2)}
+.tbadge{display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;
+  padding:3px 10px;border-radius:999px;color:var(--accent-strong);background:var(--accent-weak)}
+.ftable td:nth-child(4) .tbadge{color:var(--ok);background:var(--ok-weak)}
+.evlink{font-weight:700;font-size:12.5px}
+.evlink:hover{text-decoration:underline}
+/* 대사 */
+.recon-grid{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden}
+.recon-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;border-top:1px solid var(--line)}
+.recon-row:first-child{border-top:none}
+.recon-row .rk{font-size:13.5px;color:var(--ink-2);font-weight:600;min-width:0}
+.recon-row .rv{font-size:14px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.recon-row.total{background:var(--accent-weak);border-top:1.5px solid var(--accent-weak-2)}
+.recon-row.total .rk{font-weight:800;color:var(--accent-strong)}
+.recon-row.total .rv{font-size:17px;font-weight:800;color:var(--accent)}
+.formula{margin-top:12px;font-size:11.5px;color:var(--muted);font-weight:600;line-height:1.6;
+  background:var(--surface-3);border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 13px}
+
+/* ===== 화면 2 : 와이어프레임 ===== */
+.wirewrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px}
+.wnote{font-size:13px;font-weight:600;color:var(--muted);background:var(--surface-3);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:18px;line-height:1.6}
+.wireframe{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.wfblock{border:1.5px dashed var(--line-2);border-radius:var(--radius-sm);padding:18px 16px;background:var(--surface-2);min-height:130px}
+.wf-cap{height:16px;width:52%;background:var(--line-2);border-radius:4px;margin-bottom:14px}
+.wf-bar{height:11px;background:var(--line);border-radius:4px;margin-bottom:9px}
+.wf-bar:nth-child(3){width:88%}
+.wf-bar:nth-child(4){width:66%}
+
+/* 푸터 */
+.foot{margin-top:22px;text-align:center;font-size:12px;color:var(--faint);font-weight:600;padding:16px 0 4px}
+
+/* ===== 반응형 ===== */
+@media (max-width:1080px){
+  .app{grid-template-columns:auto auto;grid-template-areas:"brand badge" "rail rail";row-gap:14px}
+  .brand{grid-area:brand} .hbadge{grid-area:badge;justify-self:end} .rail{grid-area:rail}
+  .s1grid{grid-template-columns:1fr;gap:14px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .s3grid{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  body{font-size:14.5px}
+  .app{padding:14px;grid-template-columns:1fr;grid-template-areas:"brand" "badge" "rail";gap:12px}
+  .hbadge{justify-self:start}
+  .pname{font-size:17px}
+  .rail{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;gap:0}
+  .step{flex:0 0 auto;min-width:92px}
+  .tabs{flex-direction:column}
+  .tab{align-items:flex-start}
+  .tab .tlabel{white-space:normal}
+  .metarow{grid-template-columns:1fr}
+  .wireframe{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr}
+  .actions{flex-direction:column}
+  .btn{width:100%}
+  .panelhead{flex-direction:column;align-items:flex-start;gap:2px}
+  .ftable{font-size:12.5px}
+  .ftable th,.ftable td{padding:9px 8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important;scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+
+<!-- TrustBar : 전면 고정 신뢰 라벨 -->
+<div class="trustbar">가상 데이터 · Concept Prototype · 무동의 부고 자동수집 안 함 · 유가족 직접 과금 없음 · AI는 참고이며 담당자 최종확인</div>
+
+<!-- AppHeader : 공유 헤더(제품명 + progress-rail + 배지) -->
+<header class="app">
+  <div class="brand">
+    <div class="logo"><svg viewBox="0 0 40 40" width="34" height="34"><rect x="6" y="6" width="28" height="28" rx="6" fill="#ccc"></rect></svg></div>
+    <div class="names">
+      <div class="pname">SAMGA Care Bridge</div>
+      <div class="ptag">임직원 경조 지원 오케스트레이션 · 가상 콘셉트</div>
+    </div>
+  </div>
+  <div class="rail" role="list" aria-label="처리 단계">
+    <div class="step" role="listitem"><div class="dot">1</div><div class="slabel">접수</div></div>
+    <div class="step" role="listitem"><div class="dot">2</div><div class="slabel">임직원 동의</div></div>
+    <div class="step" role="listitem"><div class="dot">3</div><div class="slabel">정책 적용</div></div>
+    <div class="step" role="listitem"><div class="dot">4</div><div class="slabel">화환·물품 이행</div></div>
+    <div class="step" role="listitem"><div class="dot">5</div><div class="slabel">완료증빙</div></div>
+  </div>
+  <div class="hbadge"><span class="dotmark"></span>Concept · 가상 데이터</div>
+</header>
+
+<!-- Tabs -->
+<nav class="tabs" role="tablist" aria-label="화면 전환">
+  <button class="tab" role="tab" data-screen="s1"><span class="tnum">화면 1</span><span class="tlabel">HR 케이스·정책 콘솔</span></button>
+  <button class="tab" role="tab" data-screen="s3"><span class="tnum">화면 3</span><span class="tlabel">이행·정산·기업 리포트</span></button>
+  <button class="tab" role="tab" data-screen="s2"><span class="tnum">화면 2</span><span class="tlabel">임직원·유가족 동의(와이어프레임)</span></button>
+</nav>
+
+<main>
+
+  <!-- ================= 화면 1 : HR 케이스·정책 콘솔 ================= -->
+  <section id="s1" class="screen">
+    <div class="s1grid">
+
+      <!-- 좌: 정책 라이브러리 -->
+      <aside class="col policy">
+        <div class="colhead"><h2>정책 라이브러리</h2><span class="hint">회사 경조 규정 = 설정</span></div>
+        <div class="policy-list" aria-live="polite">
+
+          <div class="pgroup">
+            <div class="pg-top"><span class="pgname">직계존비속</span><label class="switch"><input type="checkbox" checked aria-label="직계존비속 지원 사용"><span class="slider"></span></label></div>
+            <div class="pg-items"><span class="chip">근조화환 1기</span><span class="chip">장례 지원물품 세트</span><span class="chip">장례 절차 안내</span></div>
+          </div>
+
+          <div class="pgroup">
+            <div class="pg-top"><span class="pgname">배우자</span><label class="switch"><input type="checkbox" checked aria-label="배우자 지원 사용"><span class="slider"></span></label></div>
+            <div class="pg-items"><span class="chip">근조화환 1기</span><span class="chip">상급 지원물품 세트</span><span class="chip">전담 컨시어지</span></div>
+          </div>
+
+          <div class="pgroup">
+            <div class="pg-top"><span class="pgname">형제자매</span><label class="switch"><input type="checkbox" checked aria-label="형제자매 지원 사용"><span class="slider"></span></label></div>
+            <div class="pg-items"><span class="chip">근조화환 1기</span><span class="chip">장례 절차 안내</span><span class="chip">기본 세트</span></div>
+          </div>
+
+          <div class="pgroup">
+            <div class="pg-top"><span class="pgname">기타 친인척</span><label class="switch"><input type="checkbox" aria-label="기타 친인척 지원 사용"><span class="slider"></span></label></div>
+            <div class="pg-items"><span class="chip">근조화환 1기</span><span class="chip">안내만</span><span class="chip">수동 승인</span></div>
+          </div>
+
+        </div>
+        <div class="policy-note">코드가 아니라 설정입니다. 관계별 지원 항목을 토글·드롭다운으로 바꾸면 케이스에 즉시 반영됩니다. 무동의 수집·자동 경조금 승인·법률/세무 대리는 하지 않습니다.</div>
+      </aside>
+
+      <!-- 중앙: Case 상세 -->
+      <div class="col case">
+        <div class="casehead">
+          <div class="ch-left"><span class="ctitle">홍○○ 임직원 · 경조 지원 케이스</span><span class="cid">CB-2026-0142 · 가상 A제조</span></div>
+          <span class="cbadge">진행중</span>
+        </div>
+        <div class="casebody">
+
+          <div class="field applicant">
+            <label class="flabel">신청 임직원</label>
+            <div class="fval">홍○○ (가상 A제조 · 생산본부)</div>
+          </div>
+
+          <div class="field rel">
+            <label class="flabel" for="relSel">관계</label>
+            <select id="relSel" aria-label="관계 선택">
+              <option value="lineal">직계존비속 (부)</option>
+              <option value="spouse">배우자</option>
+              <option value="sibling">형제자매</option>
+            </select>
+          </div>
+
+          <div class="support">
+            <div class="sup-head"><span class="sh-title">자동 적용된 지원 항목</span><span class="autotag">정책 자동 적용</span></div>
+            <div class="sup-items" id="supItems" aria-live="polite">
+              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">근조화환 1기</span><span class="si-meta">파트너 자동 배정</span></div>
+              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">장례 지원물품 세트</span><span class="si-meta">표준 구성</span></div>
+              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">장례 절차 안내</span><span class="si-meta">안내 자료 발송</span></div>
+            </div>
+          </div>
+
+          <div class="metarow">
+            <div class="meta hris"><span class="mk">HRIS 승인</span><span class="mv badge" id="hrisBadge">대기</span></div>
+            <div class="meta sla"><span class="mk">SLA 남은 시간</span><span class="mv" id="slaTimer">03:59:00</span></div>
+            <div class="meta payer"><span class="mk">지불자</span><span class="mv">기업 HR (유가족 직접 과금 없음)</span></div>
+          </div>
+
+          <div class="evidence">
+            <span class="evlabel">완료 증빙 업로드</span>
+            <div class="evbox"><span class="evicon"><svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="4" width="16" height="16" rx="3" fill="#ccc"></rect></svg></span><span class="evtext">이행 완료 후 사진·인수증이 여기 첨부됩니다 (가상)</span></div>
+          </div>
+
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnConsent">동의 요청 보내기</button>
+          <button class="btn" id="btnFulfill">이행 시작</button>
+          <button class="btn" id="btnEvidence">완료증빙 발급</button>
+        </div>
+      </div>
+
+      <!-- 우: 상태 타임라인 -->
+      <aside class="col tl">
+        <div class="colhead"><h2>이 케이스의 상태</h2><span class="hint">기능 목록이 아니라 Case 단위</span></div>
+        <ol class="timeline" id="tl" aria-live="polite">
+          <li class="tlitem"><span class="tl-dot"></span><div class="tl-body"><span class="tl-t">케이스 접수</span><span class="tl-d">가상 A제조 HR 채널 · 오늘 09:12</span></div></li>
+          <li class="tlitem"><span class="tl-dot"></span><div class="tl-body"><span class="tl-t">정책 자동 매칭</span><span class="tl-d">관계=직계존비속 → 표준 지원 세트</span></div></li>
+          <li class="tlitem"><span class="tl-dot"></span><div class="tl-body"><span class="tl-t">임직원 동의 대기</span><span class="tl-d">동의 요청 발송 전</span></div></li>
+        </ol>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- ================= 화면 3 : 이행·정산·기업 리포트 ================= -->
+  <section id="s3" class="screen" hidden>
+    <div class="kpis">
+      <div class="kpi"><span class="kpi-label">월 Case 수</span><span class="kpi-value">128</span><span class="kpi-sub">최근 30일 · 가상</span></div>
+      <div class="kpi"><span class="kpi-label">평균 처리시간</span><span class="kpi-value">3.2시간</span><span class="kpi-sub">접수→이행 완료</span></div>
+      <div class="kpi"><span class="kpi-label">SLA 준수율</span><span class="kpi-value">97.4%</span><span class="kpi-sub">4시간 기준</span></div>
+      <div class="kpi"><span class="kpi-label">케이스당 공헌이익</span><span class="kpi-value">₩18,600</span><span class="kpi-sub">가상 추정</span></div>
+    </div>
+
+    <div class="s3grid">
+      <div class="panel chartpanel">
+        <div class="panelhead"><h3>월별 SLA 준수 추이</h3><span class="hint">최근 6개월 · 가상</span></div>
+        <div class="chartwrap"><svg viewBox="0 0 320 160" width="100%" height="160"><rect x="0" y="0" width="320" height="160" fill="#eee"></rect></svg></div>
+      </div>
+      <div class="panel chartpanel">
+        <div class="panelhead"><h3>항목별 비용 구성</h3><span class="hint">이행 원가 기준 · 가상</span></div>
+        <div class="chartwrap"><svg viewBox="0 0 320 160" width="100%" height="160"><circle cx="90" cy="80" r="55" fill="#ddd"></circle></svg></div>
+      </div>
+    </div>
+
+    <div class="panel tablepanel">
+      <div class="panelhead"><h3>이행 상태</h3><span class="hint">파트너 요청/수락/완료/예외 · 가상</span></div>
+      <table class="ftable">
+        <thead><tr><th>Case</th><th>관계</th><th>화환·물품 파트너</th><th>상태</th><th>완료증빙</th><th>예외</th></tr></thead>
+        <tbody>
+          <tr><td><span>CB-2026-0142</span></td><td><span>직계존비속</span></td><td><span>가상 화훼 A</span></td><td><span class="tbadge">완료</span></td><td><a href="#" class="evlink">증빙 보기</a></td><td><span>—</span></td></tr>
+          <tr><td><span>CB-2026-0139</span></td><td><span>배우자</span></td><td><span>가상 상조 B</span></td><td><span class="tbadge">이행중</span></td><td><a href="#" class="evlink">대기</a></td><td><span>—</span></td></tr>
+          <tr><td><span>CB-2026-0137</span></td><td><span>형제자매</span></td><td><span>가상 화훼 A</span></td><td><span class="tbadge">수락</span></td><td><a href="#" class="evlink">대기</a></td><td><span>—</span></td></tr>
+          <tr><td><span>CB-2026-0131</span></td><td><span>직계존비속</span></td><td><span>가상 물류 C</span></td><td><span class="tbadge">완료</span></td><td><a href="#" class="evlink">증빙 보기</a></td><td><span>주소 재확인</span></td></tr>
+          <tr><td><span>CB-2026-0128</span></td><td><span>직계존비속</span></td><td><span>가상 상조 B</span></td><td><span class="tbadge">완료</span></td><td><a href="#" class="evlink">증빙 보기</a></td><td><span>—</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel reconpanel">
+      <div class="panelhead"><h3>비용 대사 요약</h3><span class="hint">케이스당 평균 · 가상 ₩</span></div>
+      <div class="recon-grid">
+        <div class="recon-row"><span class="rk">Case비 (기업 청구)</span><span class="rv">₩ 42,000</span></div>
+        <div class="recon-row"><span class="rk">이행 순매출</span><span class="rv">₩ 6,400</span></div>
+        <div class="recon-row"><span class="rk">파트너 지급</span><span class="rv">− ₩ 24,000</span></div>
+        <div class="recon-row"><span class="rk">결제·메시지비</span><span class="rv">− ₩ 3,200</span></div>
+        <div class="recon-row"><span class="rk">CS비</span><span class="rv">− ₩ 2,600</span></div>
+        <div class="recon-row total"><span class="rk">케이스당 공헌이익</span><span class="rv">₩ 18,600</span></div>
+      </div>
+      <div class="formula">케이스당 공헌이익 = Case비 + 이행 순매출 − 파트너 지급 − 결제/메시지비 − CS비 · 지불자=기업 HR, 유가족 직접 과금 없음</div>
+    </div>
+  </section>
+
+  <!-- ================= 화면 2 : 임직원·유가족 동의 (와이어프레임 썸네일, 클릭 불가) ================= -->
+  <section id="s2" class="screen" hidden>
+    <div class="wirewrap">
+      <div class="wnote">화면 2는 개념 와이어프레임입니다 (클릭 불가). 목적별 동의 · 공개범위 선택 · 최소정보 1회 입력 · 상태 타임라인.</div>
+      <div class="wireframe" aria-hidden="true">
+        <div class="wfblock"><div class="wf-cap"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div></div>
+        <div class="wfblock"><div class="wf-cap"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div></div>
+        <div class="wfblock"><div class="wf-cap"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div></div>
+        <div class="wfblock"><div class="wf-cap"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">© 2026 SAMGA Care Bridge — 콘셉트 프로토타입 · 모든 수치·회사·인물은 가상입니다.</footer>
+
+<script>
+(function(){
+  "use strict";
+  var $=function(s,r){return (r||document).querySelector(s);};
+  var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+  /* ---------- 아이콘 (인라인 SVG, 외부 라이브러리 없음) ---------- */
+  var ICON={
+    wreath:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 5v3M12 16v3M5 12h3M16 12h3M7 7l2 2M15 15l2 2M17 7l-2 2M9 15l-2 2"/></svg>',
+    box:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>',
+    doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>',
+    bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16"/><path d="M6 17a6 6 0 0 1 12 0"/><path d="M10 20a2 2 0 0 0 4 0"/><circle cx="12" cy="4" r="1"/></svg>'
+  };
+
+  /* ---------- 정책 세트 (관계별 자동 적용 항목) ---------- */
+  var POLICY={
+    lineal:[['wreath','근조화환 1기','파트너 자동 배정'],['box','장례 지원물품 세트','표준 구성'],['doc','장례 절차 안내','안내 자료 발송']],
+    spouse:[['wreath','근조화환 1기','파트너 자동 배정'],['box','상급 지원물품 세트','프리미엄 구성'],['bell','전담 컨시어지','1:1 배정'],['doc','장례 절차 안내','안내 자료 발송']],
+    sibling:[['wreath','근조화환 1기','파트너 자동 배정'],['doc','장례 절차 안내','안내 자료 발송']]
+  };
+  var GROUP_INDEX={lineal:0,spouse:1,sibling:2};
+
+  /* ---------- 지원 항목 렌더 (관계 + 정책 토글 반영) ---------- */
+  function renderSupport(){
+    var rel=$('#relSel').value;
+    var groups=$$('.pgroup');
+    var gi=GROUP_INDEX[rel];
+    var toggle=groups[gi] ? $('.switch input',groups[gi]) : null;
+    var box=$('#supItems');
+    var tag=$('.autotag');
+    if(toggle && !toggle.checked){
+      box.innerHTML='<div class="supitem"><span class="si-ic">'+ICON.doc+'</span><span class="si-name">이 관계의 지원 정책이 비활성 상태입니다</span><span class="si-meta">정책 라이브러리에서 활성화</span></div>';
+      if(tag){tag.textContent='정책 비활성';}
+      return;
+    }
+    var set=POLICY[rel]||[];
+    box.innerHTML=set.map(function(it){
+      return '<div class="supitem"><span class="si-ic">'+ICON[it[0]]+'</span>'+
+             '<span class="si-name">'+it[1]+'</span><span class="si-meta">'+it[2]+'</span></div>';
+    }).join('');
+    if(tag){tag.textContent='자동 적용 · '+set.length+'개 항목';}
+  }
+
+  /* ---------- progress-rail 상태 ---------- */
+  var steps=$$('.rail .step');
+  function setRail(active){
+    steps.forEach(function(s,i){
+      s.classList.remove('done','active');
+      s.removeAttribute('aria-current');
+      if(i<active-1){s.classList.add('done');}
+      else if(i===active-1){s.classList.add('active');s.setAttribute('aria-current','step');}
+    });
+  }
+
+  /* ---------- 타임라인 추가 ---------- */
+  function addTimeline(title,desc){
+    var ol=$('#tl');
+    var pend=$('.tlitem.pending',ol);
+    if(pend){pend.classList.remove('pending');}
+    var li=document.createElement('li');
+    li.className='tlitem';
+    li.innerHTML='<span class="tl-dot"></span><div class="tl-body"><span class="tl-t">'+title+'</span><span class="tl-d">'+desc+'</span></div>';
+    ol.appendChild(li);
+  }
+
+  /* ---------- 차트: 막대 (SLA 준수 추이) ---------- */
+  function barChart(){
+    var months=['3월','4월','5월','6월','7월','8월'];
+    var vals=[94.1,95.2,96.0,96.8,96.4,97.4];
+    var W=320,H=160,pl=30,pr=8,pt=14,pb=26,lo=90,hi=100;
+    var iw=W-pl-pr, ih=H-pt-pb, n=vals.length, bw=iw/n*0.54, gap=iw/n;
+    var y=function(v){return pt+ih-(v-lo)/(hi-lo)*ih;};
+    var s='';
+    [90,95,100].forEach(function(g){
+      var gy=y(g);
+      s+='<line x1="'+pl+'" y1="'+gy+'" x2="'+(W-pr)+'" y2="'+gy+'" stroke="#e4e8ee" stroke-width="1"/>';
+      s+='<text x="'+(pl-6)+'" y="'+(gy+3.5)+'" text-anchor="end" font-size="9" fill="#9aa4b2">'+g+'</text>';
+    });
+    vals.forEach(function(v,i){
+      var cx=pl+gap*i+gap/2, bx=cx-bw/2, by=y(v), bh=pt+ih-by;
+      s+='<rect x="'+bx.toFixed(1)+'" y="'+by.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+bh.toFixed(1)+'" rx="3" fill="#2b5566"/>';
+      s+='<text x="'+cx.toFixed(1)+'" y="'+(by-5).toFixed(1)+'" text-anchor="middle" font-size="8.5" font-weight="700" fill="#2b5566">'+v+'</text>';
+      s+='<text x="'+cx.toFixed(1)+'" y="'+(H-9)+'" text-anchor="middle" font-size="9.5" fill="#76818f">'+months[i]+'</text>';
+    });
+    return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="월별 SLA 준수 추이 막대 그래프, 94.1에서 97.4퍼센트로 상승">'+s+'</svg>';
+  }
+
+  /* ---------- 차트: 도넛 (항목별 비용 구성) ---------- */
+  function donutChart(){
+    var data=[['근조화환',40,'#2b5566'],['지원물품',30,'#3f7186'],['컨시어지',18,'#6f9aab'],['메시지·결제',12,'#aac6d0']];
+    var cx=78,cy=80,r=50,sw=24,C=2*Math.PI*r,off=0,s='';
+    data.forEach(function(d){
+      var frac=d[1]/100, len=frac*C;
+      s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+d[2]+'" stroke-width="'+sw+'" '+
+         'stroke-dasharray="'+len.toFixed(2)+' '+(C-len).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" '+
+         'transform="rotate(-90 '+cx+' '+cy+')"/>';
+      off+=len;
+    });
+    s+='<text x="'+cx+'" y="'+(cy-2)+'" text-anchor="middle" font-size="18" font-weight="800" fill="#1e2530">₩76k</text>';
+    s+='<text x="'+cx+'" y="'+(cy+13)+'" text-anchor="middle" font-size="9" fill="#76818f">평균 원가</text>';
+    var lx=150,ly=30;
+    data.forEach(function(d,i){
+      var yy=ly+i*27;
+      s+='<rect x="'+lx+'" y="'+(yy-9)+'" width="12" height="12" rx="3" fill="'+d[2]+'"/>';
+      s+='<text x="'+(lx+19)+'" y="'+(yy+1)+'" font-size="11" font-weight="600" fill="#3d4757">'+d[0]+'</text>';
+      s+='<text x="312" y="'+(yy+1)+'" text-anchor="end" font-size="11" font-weight="700" fill="#1e2530">'+d[1]+'%</text>';
+    });
+    return '<svg viewBox="0 0 320 160" role="img" aria-label="항목별 비용 구성 도넛 그래프">'+s+'</svg>';
+  }
+
+  /* ---------- 탭 전환 ---------- */
+  var tabs=$$('.tab');
+  function selectTab(scr){
+    tabs.forEach(function(t){
+      var on=t.getAttribute('data-screen')===scr;
+      t.setAttribute('aria-selected',on?'true':'false');
+    });
+    $$('.screen').forEach(function(sec){
+      sec.hidden = (sec.id!==scr);
+    });
+    if(scr==='s3'){renderCharts();}
+  }
+  var chartsDone=false;
+  function renderCharts(){
+    if(chartsDone) return;
+    var wraps=$$('.chartwrap');
+    if(wraps[0]) wraps[0].innerHTML=barChart();
+    if(wraps[1]) wraps[1].innerHTML=donutChart();
+    chartsDone=true;
+  }
+
+  /* ---------- SLA 카운트다운 ---------- */
+  function startSLA(){
+    var el=$('#slaTimer'); if(!el) return;
+    var t=3*3600+59*60+0;
+    function tick(){
+      if(t<=0){el.textContent='00:00:00';return;}
+      t--;
+      var h=Math.floor(t/3600), m=Math.floor((t%3600)/60), s=t%60;
+      var p=function(x){return (x<10?'0':'')+x;};
+      el.textContent=p(h)+':'+p(m)+':'+p(s);
+    }
+    setInterval(tick,1000);
+  }
+
+  /* ---------- 초기화 ---------- */
+  function init(){
+    setRail(2);
+    renderSupport();
+    startSLA();
+
+    $('#relSel').addEventListener('change',renderSupport);
+
+    $$('.pgroup').forEach(function(g,i){
+      var inp=$('.switch input',g);
+      if(!inp) return;
+      g.classList.toggle('off',!inp.checked);
+      inp.addEventListener('change',function(){
+        g.classList.toggle('off',!inp.checked);
+        if(GROUP_INDEX[$('#relSel').value]===i){renderSupport();}
+      });
+    });
+
+    tabs.forEach(function(t){
+      t.setAttribute('role','tab');
+      t.addEventListener('click',function(){selectTab(t.getAttribute('data-screen'));});
+    });
+    var initScr=(location.hash||'').replace('#','');
+    selectTab(/^s[123]$/.test(initScr)?initScr:'s1');
+
+    /* 액션: 가짜 상태 전이 (안내형 순차 진행) */
+    var bC=$('#btnConsent'), bF=$('#btnFulfill'), bE=$('#btnEvidence');
+    bC.classList.add('primary');
+    bF.setAttribute('disabled','');
+    bE.setAttribute('disabled','');
+
+    bC.addEventListener('click',function(){
+      setRail(3);
+      $('#hrisBadge').textContent='승인'; $('#hrisBadge').setAttribute('data-state','ok');
+      addTimeline('임직원 동의 완료','목적별 동의 확인 · 정책 확정 (가상)');
+      bC.textContent='동의 완료'; bC.classList.remove('primary'); bC.classList.add('done'); bC.setAttribute('disabled','');
+      bF.removeAttribute('disabled'); bF.classList.add('primary');
+    });
+    bF.addEventListener('click',function(){
+      setRail(4);
+      $('.cbadge').textContent='이행중';
+      addTimeline('화환·물품 이행 시작','파트너 배정 → 요청 발송 (가상)');
+      bF.textContent='이행 진행중'; bF.classList.remove('primary'); bF.classList.add('done'); bF.setAttribute('disabled','');
+      bE.removeAttribute('disabled'); bE.classList.add('primary');
+    });
+    bE.addEventListener('click',function(){
+      setRail(5);
+      $('.cbadge').textContent='완료';
+      $('.evtext').textContent='이행 완료 · 가상 완료증빙 링크 생성됨 (담당자 최종확인 대기)';
+      $('.evbox').style.borderColor='var(--accent-weak-2)';
+      addTimeline('이행 완료 · 완료증빙 발급','기업 리포트에 자동 반영 (가상)');
+      bE.textContent='증빙 발급됨'; bE.classList.remove('primary'); bE.classList.add('done'); bE.setAttribute('disabled','');
+    });
+
+    /* 와이어프레임(화면2)은 클릭 불가로 유지 */
+    var s2=$('#s2'); if(s2){ $$('a,button,input,select',s2).forEach(function(el){el.setAttribute('tabindex','-1');}); }
+  }
+
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}
+  else{init();}
+})();
+</script>
+</body>
+</html>

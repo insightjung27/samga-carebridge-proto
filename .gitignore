@@ -1,0 +1,8 @@
+.vercel/
+.vercel
+.DS_Store
+.env*
+*.pem
+node_modules/
+lofi.html
+lofi.frozen.html
