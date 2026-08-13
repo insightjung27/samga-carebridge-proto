@@ -450,8 +450,8 @@ main{margin-top:16px}
           </div>
 
           <div class="metarow">
-            <div class="meta hris"><span class="mk">HRIS 승인</span><span class="mv badge" id="hrisBadge">대기</span></div>
-            <div class="meta sla"><span class="mk">SLA 남은 시간</span><span class="mv" id="slaTimer">03:59:00</span></div>
+            <div class="meta hris"><span class="mk">인사 승인</span><span class="mv badge" id="hrisBadge">대기</span></div>
+            <div class="meta sla"><span class="mk">처리 기한까지 남음</span><span class="mv" id="slaTimer">03:59:00</span></div>
             <div class="meta payer"><span class="mk">지불자</span><span class="mv">기업 HR (유가족 직접 과금 없음)</span></div>
           </div>
 
@@ -486,13 +486,13 @@ main{margin-top:16px}
     <div class="kpis">
       <div class="kpi"><span class="kpi-label">월 Case 수</span><span class="kpi-value">128</span><span class="kpi-sub">최근 30일 · 가상</span></div>
       <div class="kpi"><span class="kpi-label">평균 처리시간</span><span class="kpi-value">3.2시간</span><span class="kpi-sub">접수→이행 완료</span></div>
-      <div class="kpi"><span class="kpi-label">SLA 준수율</span><span class="kpi-value">97.4%</span><span class="kpi-sub">4시간 기준</span></div>
+      <div class="kpi"><span class="kpi-label">기한 내 처리율</span><span class="kpi-value">97.4%</span><span class="kpi-sub">4시간 기준</span></div>
       <div class="kpi"><span class="kpi-label">케이스당 공헌이익</span><span class="kpi-value">₩18,600</span><span class="kpi-sub">가상 추정</span></div>
     </div>
 
     <div class="s3grid">
       <div class="panel chartpanel">
-        <div class="panelhead"><h3>월별 SLA 준수 추이</h3><span class="hint">최근 6개월 · 가상</span></div>
+        <div class="panelhead"><h3>월별 기한 내 처리율 추이</h3><span class="hint">최근 6개월 · 가상</span></div>
         <div class="chartwrap"><svg viewBox="0 0 320 160" width="100%" height="160"><rect x="0" y="0" width="320" height="160" fill="#eee"></rect></svg></div>
       </div>
       <div class="panel chartpanel">
@@ -620,7 +620,7 @@ main{margin-top:16px}
     ol.appendChild(li);
   }
 
-  /* ---------- 차트: 막대 (SLA 준수 추이) ---------- */
+  /* ---------- 차트: 막대 (기한 내 처리율 추이) ---------- */
   function barChart(){
     var months=['3월','4월','5월','6월','7월','8월'];
     var vals=[94.1,95.2,96.0,96.8,96.4,97.4];
@@ -639,7 +639,7 @@ main{margin-top:16px}
       s+='<text x="'+cx.toFixed(1)+'" y="'+(by-5).toFixed(1)+'" text-anchor="middle" font-size="8.5" font-weight="700" fill="#2b5566">'+v+'</text>';
       s+='<text x="'+cx.toFixed(1)+'" y="'+(H-9)+'" text-anchor="middle" font-size="9.5" fill="#76818f">'+months[i]+'</text>';
     });
-    return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="월별 SLA 준수 추이 막대 그래프, 94.1에서 97.4퍼센트로 상승">'+s+'</svg>';
+    return '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="월별 기한 내 처리율 추이 막대 그래프, 94.1에서 97.4퍼센트로 상승">'+s+'</svg>';
   }
 
   /* ---------- 차트: 도넛 (항목별 비용 구성) ---------- */
