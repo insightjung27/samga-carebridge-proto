@@ -189,6 +189,58 @@ main{margin-top:16px}
 .tlitem.pending .tl-t{color:var(--muted)}
 .tl-d{font-size:12px;color:var(--muted);font-weight:500;line-height:1.45}
 
+/* ===== 화면 1 : 읽는 법 안내(직관화) ===== */
+/* progress-rail 캡션 래퍼 */
+.railwrap{display:flex;flex-direction:column;gap:6px;min-width:0}
+.railcap{font-size:11.5px;color:var(--muted);font-weight:700;text-align:center;letter-spacing:.01em}
+.railcap b{color:var(--accent);font-weight:800}
+
+/* 화면1 상단 안내 카드 (목적 캡션 + 읽는 법 + 핵심 메시지) */
+.s1intro{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);padding:16px 18px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px}
+.s1caption{font-size:13.5px;line-height:1.65;color:var(--ink-2);font-weight:600}
+.s1caption strong{color:var(--ink);font-weight:800}
+.s1caption .cap-loc{color:var(--accent);font-weight:800;white-space:nowrap}
+.s1caption .cap-arrow{color:var(--accent-2);font-weight:800;padding:0 2px}
+
+/* 이렇게 읽으세요 3단 콜아웃 */
+.s1read{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px}
+.readlbl{flex:0 0 auto;font-size:11.5px;font-weight:800;color:var(--accent-strong);
+  background:var(--accent-weak);border:1px solid var(--accent-weak-2);border-radius:999px;padding:4px 11px}
+.readsteps{list-style:none;display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;flex:1 1 auto;min-width:0}
+.readsteps li{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink-2);min-width:0}
+.readsteps li:not(:last-child)::after{content:"→";margin-left:2px;color:var(--accent-2);font-weight:800;flex:0 0 auto}
+.rnum{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;
+  background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;flex:0 0 auto}
+
+/* 두 핵심 메시지 (눈에 띄게) */
+.s1msgs{display:flex;gap:10px;flex-wrap:wrap}
+.msgpill{flex:1 1 260px;display:flex;align-items:center;gap:9px;min-width:0;
+  background:var(--accent-weak);border:1px solid var(--accent-weak-2);border-radius:var(--radius-sm);padding:11px 13px;
+  font-size:13px;font-weight:700;color:var(--accent-strong);line-height:1.5}
+.msgpill strong{color:var(--accent-strong);font-weight:900;text-decoration:underline;text-decoration-color:var(--accent-2);text-underline-offset:3px}
+.msgpill::before{content:"";flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:var(--accent);align-self:flex-start;margin-top:6px}
+
+/* 구역 번호 배지 + 역할 라벨 (① 규정 · ② 한 건 · ③ 단계) */
+.znum{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;
+  background:var(--accent);color:#fff;font-size:12.5px;font-weight:800;flex:0 0 auto;margin-right:8px}
+.zrole{display:inline-flex;align-items:center;font-size:11px;font-weight:700;color:var(--accent-strong);
+  background:var(--accent-weak);border:1px solid var(--accent-weak-2);border-radius:999px;padding:2px 8px;margin-left:8px;white-space:nowrap}
+.colhead h2{display:flex;align-items:center;min-width:0}
+.zline{display:inline-flex;align-items:center;font-size:12px;font-weight:800;color:var(--accent-strong);margin-bottom:5px}
+
+/* 규정→케이스 자동적용 표시 */
+.sh-right{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto}
+.autoflash{font-size:11px;font-weight:800;color:var(--ok);background:var(--ok-weak);border:1px solid var(--ok-weak);
+  border-radius:999px;padding:3px 9px;white-space:nowrap;opacity:0;transform:translateY(-3px);
+  transition:opacity .25s ease,transform .25s ease}
+.autoflash.show{opacity:1;transform:none}
+.autoflash[hidden]{display:none}
+.fromrule{flex:0 0 auto;font-size:10.5px;font-weight:800;color:var(--accent);background:var(--accent-weak);
+  border:1px solid var(--accent-weak-2);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.supitem{box-shadow:inset 3px 0 0 var(--accent-2)}
+
 /* ===== 화면 3 : 리포트 ===== */
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);
@@ -246,7 +298,7 @@ main{margin-top:16px}
 /* ===== 반응형 ===== */
 @media (max-width:1080px){
   .app{grid-template-columns:auto auto;grid-template-areas:"brand badge" "rail rail";row-gap:14px}
-  .brand{grid-area:brand} .hbadge{grid-area:badge;justify-self:end} .rail{grid-area:rail}
+  .brand{grid-area:brand} .hbadge{grid-area:badge;justify-self:end} .railwrap{grid-area:rail}
   .s1grid{grid-template-columns:1fr;gap:14px}
   .kpis{grid-template-columns:1fr 1fr}
   .s3grid{grid-template-columns:1fr}
@@ -255,6 +307,10 @@ main{margin-top:16px}
   body{font-size:14.5px}
   .app{padding:14px;grid-template-columns:1fr;grid-template-areas:"brand" "badge" "rail";gap:12px}
   .hbadge{justify-self:start}
+  .s1intro{padding:14px}
+  .s1msgs{flex-direction:column}
+  .readsteps{gap:8px}
+  .readsteps li{font-size:12.5px}
   .pname{font-size:17px}
   .rail{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;gap:0}
   .step{flex:0 0 auto;min-width:92px}
@@ -289,12 +345,15 @@ main{margin-top:16px}
       <div class="ptag">임직원 경조 지원 오케스트레이션 · 가상 콘셉트</div>
     </div>
   </div>
-  <div class="rail" role="list" aria-label="처리 단계">
-    <div class="step" role="listitem"><div class="dot">1</div><div class="slabel">접수</div></div>
-    <div class="step" role="listitem"><div class="dot">2</div><div class="slabel">임직원 동의</div></div>
-    <div class="step" role="listitem"><div class="dot">3</div><div class="slabel">정책 적용</div></div>
-    <div class="step" role="listitem"><div class="dot">4</div><div class="slabel">화환·물품 이행</div></div>
-    <div class="step" role="listitem"><div class="dot">5</div><div class="slabel">완료증빙</div></div>
+  <div class="railwrap">
+    <div class="railcap"><b>이 건이 지금 어디까지</b> · 접수 → 완료 진행 단계</div>
+    <div class="rail" role="list" aria-label="처리 단계">
+      <div class="step" role="listitem"><div class="dot">1</div><div class="slabel">접수</div></div>
+      <div class="step" role="listitem"><div class="dot">2</div><div class="slabel">임직원 동의</div></div>
+      <div class="step" role="listitem"><div class="dot">3</div><div class="slabel">정책 적용</div></div>
+      <div class="step" role="listitem"><div class="dot">4</div><div class="slabel">화환·물품 이행</div></div>
+      <div class="step" role="listitem"><div class="dot">5</div><div class="slabel">완료증빙</div></div>
+    </div>
   </div>
   <div class="hbadge"><span class="dotmark"></span>Concept · 가상 데이터</div>
 </header>
@@ -310,11 +369,29 @@ main{margin-top:16px}
 
   <!-- ================= 화면 1 : HR 케이스·정책 콘솔 ================= -->
   <section id="s1" class="screen">
+
+    <!-- 읽는 법 안내 : 목적 캡션 + 3단 콜아웃 + 핵심 메시지 -->
+    <div class="s1intro">
+      <p class="s1caption"><strong>기업 HR 담당자 화면.</strong> 회사 경조 규정을 미리 '설정'해두면<span class="cap-loc">(왼쪽)</span>, 직원 경조사 발생 시 규정대로 자동 구성된 한 건<span class="cap-loc">(가운데)</span>을 접수<span class="cap-arrow">→</span>동의<span class="cap-arrow">→</span>이행<span class="cap-arrow">→</span>완료까지 한 곳에서 처리합니다.</p>
+      <div class="s1read">
+        <span class="readlbl">이렇게 읽으세요</span>
+        <ol class="readsteps">
+          <li><span class="rnum">①</span>회사 규정을 설정</li>
+          <li><span class="rnum">②</span>실제 한 건이 규정대로 자동 구성</li>
+          <li><span class="rnum">③</span>단계별로 처리</li>
+        </ol>
+      </div>
+      <div class="s1msgs">
+        <span class="msgpill">회사마다 다른 규정을 <strong>코드가 아니라 설정</strong>으로</span>
+        <span class="msgpill">기능 목록이 아니라 <strong>Case(한 건) 단위</strong>로</span>
+      </div>
+    </div>
+
     <div class="s1grid">
 
       <!-- 좌: 정책 라이브러리 -->
       <aside class="col policy">
-        <div class="colhead"><h2>정책 라이브러리</h2><span class="hint">회사 경조 규정 = 설정</span></div>
+        <div class="colhead"><h2><span class="znum">①</span>회사 규정<span class="zrole">설정</span></h2><span class="hint">경조 규정 라이브러리</span></div>
         <div class="policy-list" aria-live="polite">
 
           <div class="pgroup">
@@ -344,7 +421,7 @@ main{margin-top:16px}
       <!-- 중앙: Case 상세 -->
       <div class="col case">
         <div class="casehead">
-          <div class="ch-left"><span class="ctitle">홍○○ 임직원 · 경조 지원 케이스</span><span class="cid">CB-2026-0142 · 가상 A제조</span></div>
+          <div class="ch-left"><span class="zline"><span class="znum">②</span>실제 접수된 한 건<span class="zrole">규정 자동 적용</span></span><span class="ctitle">홍○○ 임직원 · 경조 지원 케이스</span><span class="cid">CB-2026-0142 · 가상 A제조</span></div>
           <span class="cbadge">진행중</span>
         </div>
         <div class="casebody">
@@ -364,11 +441,11 @@ main{margin-top:16px}
           </div>
 
           <div class="support">
-            <div class="sup-head"><span class="sh-title">자동 적용된 지원 항목</span><span class="autotag">정책 자동 적용</span></div>
+            <div class="sup-head"><span class="sh-title">자동 적용된 지원 항목 <span style="font-weight:600;color:var(--muted)">— 왼쪽 규정에서 자동 구성</span></span><span class="sh-right"><span class="autoflash" id="autoFlash" hidden>규정 자동 적용됨</span><span class="autotag">정책 자동 적용</span></span></div>
             <div class="sup-items" id="supItems" aria-live="polite">
-              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">근조화환 1기</span><span class="si-meta">파트너 자동 배정</span></div>
-              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">장례 지원물품 세트</span><span class="si-meta">표준 구성</span></div>
-              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">장례 절차 안내</span><span class="si-meta">안내 자료 발송</span></div>
+              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">근조화환 1기</span><span class="fromrule">← 규정에서 자동</span><span class="si-meta">파트너 자동 배정</span></div>
+              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">장례 지원물품 세트</span><span class="fromrule">← 규정에서 자동</span><span class="si-meta">표준 구성</span></div>
+              <div class="supitem"><span class="si-ic"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" fill="#ccc"></circle></svg></span><span class="si-name">장례 절차 안내</span><span class="fromrule">← 규정에서 자동</span><span class="si-meta">안내 자료 발송</span></div>
             </div>
           </div>
 
@@ -393,7 +470,7 @@ main{margin-top:16px}
 
       <!-- 우: 상태 타임라인 -->
       <aside class="col tl">
-        <div class="colhead"><h2>이 케이스의 상태</h2><span class="hint">기능 목록이 아니라 Case 단위</span></div>
+        <div class="colhead"><h2><span class="znum">③</span>진행 단계</h2><span class="hint">이 케이스의 상태</span></div>
         <ol class="timeline" id="tl" aria-live="polite">
           <li class="tlitem"><span class="tl-dot"></span><div class="tl-body"><span class="tl-t">케이스 접수</span><span class="tl-d">가상 A제조 HR 채널 · 오늘 09:12</span></div></li>
           <li class="tlitem"><span class="tl-dot"></span><div class="tl-body"><span class="tl-t">정책 자동 매칭</span><span class="tl-d">관계=직계존비속 → 표준 지원 세트</span></div></li>
@@ -442,13 +519,13 @@ main{margin-top:16px}
       <div class="panelhead"><h3>비용 대사 요약</h3><span class="hint">케이스당 평균 · 가상 ₩</span></div>
       <div class="recon-grid">
         <div class="recon-row"><span class="rk">Case비 (기업 청구)</span><span class="rv">₩ 42,000</span></div>
-        <div class="recon-row"><span class="rk">이행 순매출</span><span class="rv">₩ 6,400</span></div>
+        <div class="recon-row"><span class="rk">이행 매출</span><span class="rv">₩ 6,400</span></div>
         <div class="recon-row"><span class="rk">파트너 지급</span><span class="rv">− ₩ 24,000</span></div>
         <div class="recon-row"><span class="rk">결제·메시지비</span><span class="rv">− ₩ 3,200</span></div>
         <div class="recon-row"><span class="rk">CS비</span><span class="rv">− ₩ 2,600</span></div>
         <div class="recon-row total"><span class="rk">케이스당 공헌이익</span><span class="rv">₩ 18,600</span></div>
       </div>
-      <div class="formula">케이스당 공헌이익 = Case비 + 이행 순매출 − 파트너 지급 − 결제/메시지비 − CS비 · 지불자=기업 HR, 유가족 직접 과금 없음</div>
+      <div class="formula">케이스당 공헌이익 = Case비 + 이행 매출 − 파트너 지급 − 결제/메시지비 − CS비 · 지불자=기업 HR, 유가족 직접 과금 없음</div>
     </div>
   </section>
 
@@ -507,9 +584,18 @@ main{margin-top:16px}
     var set=POLICY[rel]||[];
     box.innerHTML=set.map(function(it){
       return '<div class="supitem"><span class="si-ic">'+ICON[it[0]]+'</span>'+
-             '<span class="si-name">'+it[1]+'</span><span class="si-meta">'+it[2]+'</span></div>';
+             '<span class="si-name">'+it[1]+'</span>'+
+             '<span class="fromrule">← 규정에서 자동</span>'+
+             '<span class="si-meta">'+it[2]+'</span></div>';
     }).join('');
     if(tag){tag.textContent='자동 적용 · '+set.length+'개 항목';}
+  }
+
+  /* ---------- 규정 자동적용 순간 안내 ---------- */
+  function flashAuto(){
+    var f=document.getElementById('autoFlash'); if(!f) return;
+    f.hidden=false; f.classList.remove('show'); void f.offsetWidth; f.classList.add('show');
+    clearTimeout(f._t); f._t=setTimeout(function(){f.classList.remove('show');f.hidden=true;},1900);
   }
 
   /* ---------- progress-rail 상태 ---------- */
@@ -620,7 +706,7 @@ main{margin-top:16px}
     renderSupport();
     startSLA();
 
-    $('#relSel').addEventListener('change',renderSupport);
+    $('#relSel').addEventListener('change',function(){renderSupport();flashAuto();});
 
     $$('.pgroup').forEach(function(g,i){
       var inp=$('.switch input',g);
@@ -628,7 +714,7 @@ main{margin-top:16px}
       g.classList.toggle('off',!inp.checked);
       inp.addEventListener('change',function(){
         g.classList.toggle('off',!inp.checked);
-        if(GROUP_INDEX[$('#relSel').value]===i){renderSupport();}
+        if(GROUP_INDEX[$('#relSel').value]===i){renderSupport();flashAuto();}
       });
     });
 
