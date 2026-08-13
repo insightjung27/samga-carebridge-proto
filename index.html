@@ -281,6 +281,36 @@ main{margin-top:16px}
 .formula{margin-top:12px;font-size:11.5px;color:var(--muted);font-weight:600;line-height:1.6;
   background:var(--surface-3);border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 13px}
 
+/* ===== 화면 3 : 성장 로드맵 패널 (KPI 위 · 슬림) ===== */
+.growth{margin-bottom:16px;display:flex;flex-direction:column;gap:14px}
+.growth-lead{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.growth-tag{flex:0 0 auto;display:inline-flex;align-items:center;font-size:11.5px;font-weight:800;color:#fff;
+  background:var(--accent);border-radius:999px;padding:5px 12px;letter-spacing:.01em;white-space:nowrap}
+.growth-lead p{font-size:13.5px;line-height:1.6;color:var(--ink-2);font-weight:600;min-width:0;flex:1 1 240px}
+.growth-lead strong{color:var(--accent-strong);font-weight:800}
+/* 성장 레버 4칩/카드 */
+.growth-levers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.lever{display:flex;flex-direction:column;gap:4px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:12px 13px;box-shadow:inset 3px 0 0 var(--accent-2);min-width:0}
+.lever-k{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.02em}
+.lever-v{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.4}
+.lever-s{font-size:11.5px;color:var(--muted);font-weight:600;line-height:1.4}
+/* 미니 피벗 래더 (가로 · 화살표) */
+.pivot-wrap{background:var(--surface-3);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 14px;
+  display:flex;flex-direction:column;gap:9px}
+.pivot-ladder{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pivot-step{display:inline-flex;align-items:center;justify-content:center;text-align:center;
+  font-size:12.5px;font-weight:700;color:var(--accent-strong);background:var(--accent-weak);
+  border:1px solid var(--accent-weak-2);border-radius:999px;padding:7px 13px;min-width:0}
+.pivot-step.wedge{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pivot-arrow{flex:0 0 auto;display:inline-flex;align-items:center;color:var(--accent-2);font-weight:800;font-size:15px}
+.pivot-cap{font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.5}
+/* 재프레이밍 한 줄 */
+.reframe{font-size:13px;line-height:1.6;color:var(--accent-strong);font-weight:700;background:var(--accent-weak);
+  border:1px solid var(--accent-weak-2);border-radius:var(--radius-sm);padding:12px 14px}
+.reframe strong{color:var(--accent-strong);font-weight:900;text-decoration:underline;
+  text-decoration-color:var(--accent-2);text-underline-offset:3px}
+
 /* ===== 화면 2 : 와이어프레임 ===== */
 .wirewrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px}
 .wnote{font-size:13px;font-weight:600;color:var(--muted);background:var(--surface-3);border:1px solid var(--line);
@@ -291,6 +321,22 @@ main{margin-top:16px}
 .wf-bar{height:11px;background:var(--line);border-radius:4px;margin-bottom:9px}
 .wf-bar:nth-child(3){width:88%}
 .wf-bar:nth-child(4){width:66%}
+/* 화면2 샘플 예시 카드 */
+.wf-card{border:1px solid var(--line);border-radius:var(--radius-sm);padding:15px 16px;background:var(--surface)}
+.wf-htitle{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.wf-htitle .t{font-size:14.5px;font-weight:800;color:var(--ink)}
+.wf-ex{font-size:11px;font-weight:800;color:var(--accent);background:var(--accent-weak);border:1px solid var(--accent-weak-2);padding:2px 8px;border-radius:999px;white-space:nowrap}
+.wf-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13.5px;padding:8px 0;border-top:1px dashed var(--line)}
+.wf-row:first-of-type{border-top:0}
+.wf-k{color:var(--muted);font-weight:600}
+.wf-v{color:var(--ink-2);font-weight:700;text-align:right}
+.wf-v.yes{color:var(--ok);font-weight:800}
+.wf-v.no{color:var(--faint);font-weight:700}
+.wf-time{display:flex;gap:10px;align-items:baseline;font-size:13.5px;padding:7px 0;border-top:1px dashed var(--line)}
+.wf-time:first-of-type{border-top:0}
+.wf-time .tm{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:800;min-width:56px}
+.wf-time .ev{color:var(--ink-2);font-weight:600}
+.wf-time.now .tm,.wf-time.now .ev{color:var(--muted)}
 
 /* 푸터 */
 .foot{margin-top:22px;text-align:center;font-size:12px;color:var(--faint);font-weight:600;padding:16px 0 4px}
@@ -301,6 +347,7 @@ main{margin-top:16px}
   .brand{grid-area:brand} .hbadge{grid-area:badge;justify-self:end} .railwrap{grid-area:rail}
   .s1grid{grid-template-columns:1fr;gap:14px}
   .kpis{grid-template-columns:1fr 1fr}
+  .growth-levers{grid-template-columns:1fr 1fr}
   .s3grid{grid-template-columns:1fr}
 }
 @media (max-width:560px){
@@ -483,6 +530,40 @@ main{margin-top:16px}
 
   <!-- ================= 화면 3 : 이행·정산·기업 리포트 ================= -->
   <section id="s3" class="screen" hidden>
+
+    <!-- 성장 로드맵 : 단위경제(KPI) 위에 성장 서사(레버·피벗) 슬림 패널 -->
+    <div class="growth panel">
+      <div class="growth-lead">
+        <span class="growth-tag">성장 로드맵</span>
+        <p>이 리포트는 <strong>쐐기의 단위경제</strong>입니다. 성장은 아래 <strong>네 레버와 피벗</strong>에서 옵니다.</p>
+      </div>
+
+      <!-- 성장 레버 4개 -->
+      <div class="growth-levers">
+        <div class="lever"><span class="lever-k">레버 1</span><span class="lever-v">계약기업 수</span><span class="lever-s">앵커 고객 확장</span></div>
+        <div class="lever"><span class="lever-k">레버 2</span><span class="lever-v">사당 커버 임직원</span><span class="lever-s">계약 내 침투율</span></div>
+        <div class="lever"><span class="lever-k">레버 3</span><span class="lever-v">White-label 채널</span><span class="lever-s">복지대행·보험</span></div>
+        <div class="lever"><span class="lever-k">레버 4</span><span class="lever-v">추모·안치 구독</span><span class="lever-s">반복 트래픽</span></div>
+      </div>
+
+      <!-- 미니 피벗 래더 -->
+      <div class="pivot-wrap">
+        <div class="pivot-ladder" role="list" aria-label="성장 피벗 래더">
+          <span class="pivot-step wedge" role="listitem">쐐기 · 기업 경조 이행</span>
+          <span class="pivot-arrow" aria-hidden="true">→</span>
+          <span class="pivot-step" role="listitem">White-label 채널</span>
+          <span class="pivot-arrow" aria-hidden="true">→</span>
+          <span class="pivot-step" role="listitem">임직원·유족 생애 케어</span>
+          <span class="pivot-arrow" aria-hidden="true">→</span>
+          <span class="pivot-step" role="listitem">부고 트래픽 추모·안치 구독</span>
+        </div>
+        <p class="pivot-cap">같은 고객·데이터·채널 재사용 · 가상</p>
+      </div>
+
+      <!-- 재프레이밍 -->
+      <p class="reframe">운영 툴이 아니라 <strong>삼가 자산을 새 구매자에게 파는 첫 쐐기</strong> → 피벗으로 매출·트래픽 확장.</p>
+    </div>
+
     <div class="kpis">
       <div class="kpi"><span class="kpi-label">월 Case 수</span><span class="kpi-value">128</span><span class="kpi-sub">최근 30일 · 가상</span></div>
       <div class="kpi"><span class="kpi-label">평균 처리시간</span><span class="kpi-value">3.2시간</span><span class="kpi-sub">접수→이행 완료</span></div>
@@ -532,12 +613,41 @@ main{margin-top:16px}
   <!-- ================= 화면 2 : 임직원·유가족 동의 (와이어프레임 썸네일, 클릭 불가) ================= -->
   <section id="s2" class="screen" hidden>
     <div class="wirewrap">
-      <div class="wnote">화면 2는 개념 와이어프레임입니다 (클릭 불가). 목적별 동의 · 공개범위 선택 · 최소정보 1회 입력 · 상태 타임라인.</div>
-      <div class="wireframe" aria-hidden="true">
-        <div class="wfblock"><div class="wf-cap"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div></div>
-        <div class="wfblock"><div class="wf-cap"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div></div>
-        <div class="wfblock"><div class="wf-cap"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div></div>
-        <div class="wfblock"><div class="wf-cap"></div><div class="wf-bar"></div><div class="wf-bar"></div><div class="wf-bar"></div></div>
+      <div class="wnote">화면 2는 개념 화면입니다 (클릭 불가). 아래는 임직원·유가족이 받게 될 <b>동의 화면의 샘플 예시</b>입니다 — 목적별 동의 · 공개 범위 · 최소 정보 1회 입력 · 진행 상태.</div>
+      <div class="wireframe">
+
+        <div class="wf-card">
+          <div class="wf-htitle"><span class="t">목적별 동의</span><span class="wf-ex">가상 예시</span></div>
+          <div class="wf-row"><span class="wf-k">부고 안내 수신</span><span class="wf-v yes">동의함</span></div>
+          <div class="wf-row"><span class="wf-k">지원(화환·물품) 진행</span><span class="wf-v yes">동의함</span></div>
+          <div class="wf-row"><span class="wf-k">최소 연락처 제공</span><span class="wf-v yes">동의함</span></div>
+          <div class="wf-row"><span class="wf-k">마케팅·부가 안내</span><span class="wf-v no">미동의</span></div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-htitle"><span class="t">공개 범위 선택</span><span class="wf-ex">가상 예시</span></div>
+          <div class="wf-row"><span class="wf-k">부고 공개 대상</span><span class="wf-v">사내 같은 부서만</span></div>
+          <div class="wf-row"><span class="wf-k">빈소 위치 공개</span><span class="wf-v yes">공개</span></div>
+          <div class="wf-row"><span class="wf-k">조의금 계좌 표시</span><span class="wf-v no">비공개</span></div>
+          <div class="wf-row"><span class="wf-k">상주 연락처 노출</span><span class="wf-v">담당자만</span></div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-htitle"><span class="t">최소 정보 (1회 입력)</span><span class="wf-ex">가상 예시</span></div>
+          <div class="wf-row"><span class="wf-k">상주</span><span class="wf-v">홍○○ (본인)</span></div>
+          <div class="wf-row"><span class="wf-k">고인과의 관계</span><span class="wf-v">직계존속 (부)</span></div>
+          <div class="wf-row"><span class="wf-k">빈소</span><span class="wf-v">△△병원 3호실</span></div>
+          <div class="wf-row"><span class="wf-k">발인</span><span class="wf-v">2026-08-15 07:00</span></div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-htitle"><span class="t">진행 상태</span><span class="wf-ex">가상 예시</span></div>
+          <div class="wf-time"><span class="tm">09:12</span><span class="ev">동의 요청 받음</span></div>
+          <div class="wf-time"><span class="tm">09:20</span><span class="ev">동의 완료</span></div>
+          <div class="wf-time"><span class="tm">09:25</span><span class="ev">지원 진행 안내 발송</span></div>
+          <div class="wf-time now"><span class="tm">진행중</span><span class="ev">근조화환 이행 준비</span></div>
+        </div>
+
       </div>
     </div>
   </section>
